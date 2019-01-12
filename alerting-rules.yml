@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus-rule: alerting-rule
+  name: alerting-rules
+  namespace: monitoring
+spec:
+  groups:
+  - name: disk.usage.rules
+    rules:
+    - alert: some node are running out of disk space
+      annotations:
+        description: some node are running out of disk space.
+        summary: some node are running out of disk space.
+      expr: |
+        absent(up{job="alertmanager-main"} == 1)
+      for: 1m
+      labels:
+        severity: critical
